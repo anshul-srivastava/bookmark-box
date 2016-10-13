@@ -24,7 +24,7 @@
             bookmarkTable = datastore.getTable('bookmarks');
 
             datastore.addRemoteChangeEventListener(function(event) {
-            	console.log('remote event triigered',event);
+                console.log('remote event triigered', event);
                 that.syncBookmarks();
 
             });
@@ -718,8 +718,27 @@
                 return true;
             };
 
+
+
+            // timer for commit
+            // added 2 sec delay in case of more commit
+            var commitTimeout;
+
+            function commitDS() {
+                commitTimeout = setTimeout(function() {
+                    commitTimeout = null;
+                    ds.commit();
+                }, 2000);
+
+            }
             this.commit = function() {
+                // if (commitTimeout) {
+                //     clearTimeout(commitTimeout);
+                //     return commitDS();
+                // }
+                // commitDS();
                 ds.commit();
             };
+
         }
     })(window);
