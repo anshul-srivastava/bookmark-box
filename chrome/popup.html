@@ -1,0 +1,36 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>Bookmark Box - Sync your bookmarks with your Dropbox account</title>
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+     <script src="js/popup.js"></script>
+  </head>
+  <body>
+    <div class="headingContainer">
+    <div class="heading"><img src="img/Bookmark-Box-icon-38.png"/><span>Bookmark Box</span></div>
+    <div class="appDesc">Bookmark Box synchronizes your browser's bookmarks with your Dropbox account, across multiple computers and web browsers</div>
+    </div>
+    <div id="sign_in_container">
+    <div class="syncWarningContainer">
+         <span class="syncWarningStatus">Not Syncing.</span>
+    </div>
+    <div class="loginDesc"><span style="color:red">You are not logged in !</span>
+      <p>To get started, Login with your Dropbox account by clicking the button below</p>
+    </div>
+    <div id="sign_in_btn" href="#"><img src="img/dropbox-login-button.png"></div>
+    </div>
+    <div id="log_out_container">
+      <div class="successContainer">
+         <span class="syncSuccessStatus">In Sync</span>
+      </div>
+      
+     <div class="logoutDesc">To stop syncing and logout from your Dropbox account, Click on the button below</div>
+        <div id="log_out_btn" href="#"><img src="img/dropbox-unlink-button.png"></div>
+        <div id="log_out_status_loading"><span>Logging out, Please wait ... <i class="fa fa-spinner fa-spin"></i><span></div>
+    </div>
+
+  </body>
+</html>
+
