@@ -12,6 +12,7 @@ var DatastoreManager = function(dropBoxAppKey, credentials, authDriver, setCrede
 	
 	this.isAuthenticated = function() {
 		console.log('is authenticated ==>');
+		console.log('credentials ==>',credentials);
 		if (credentials) {
 			return true;
 		} else {
@@ -36,8 +37,8 @@ var DatastoreManager = function(dropBoxAppKey, credentials, authDriver, setCrede
 					return;
 				}
 				//localStorage.setItem('DropboxOAuth', JSON.stringify(client.credentials()));
-				setCredentialsFunc(client.credentials());
-				callback(null, client);
+				setCredentialsFunc(data.access_token);
+				callback(null, data);
 			});
 		}
 	}
@@ -80,7 +81,7 @@ var DatastoreManager = function(dropBoxAppKey, credentials, authDriver, setCrede
 
 
 	this.openBookmarkDatastore = function(callback) {
-		if (!dropboxClient.isAuthenticated()) {
+		if (!this.isAuthenticated()) {
 			callback({
 				"error": "Please sign in first"
 			}, null);
@@ -95,7 +96,7 @@ var DatastoreManager = function(dropBoxAppKey, credentials, authDriver, setCrede
 				bookmarkDatastoreInstance = new BookmarkDatastore(datastore);
 				callback(null, bookmarkDatastoreInstance);
 			} else {
-				openDS(dropboxClient.getDatastoreManager(), 0, function(err, datastore) {
+				openDS(DATASTORE_MANAGER, 0, function(err, datastore) {
 					if (err) {
 						callback(err, null);
 					} else {

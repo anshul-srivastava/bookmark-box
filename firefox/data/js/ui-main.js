@@ -5,7 +5,7 @@
 		var bookmarkDatastore = null;
 		var firefoxBookmarkMessenger = null;
 
-		if(!window.Dropbox) {
+		if(!window.DATASTORE_MANAGER) {
 			console.log('Unable to load dropbox api');
 			return;
 		}

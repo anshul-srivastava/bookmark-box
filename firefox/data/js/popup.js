@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('loading_container').style.display = 'none';
 
     var errorContainer = document.getElementById('dropbox_api_err_container');
-    if (!window.Dropbox) {
+    if (!window.DATASTORE_MANAGER) {
         errorContainer.style.display = 'block';
         return;
     }
