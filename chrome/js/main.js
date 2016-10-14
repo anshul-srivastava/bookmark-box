@@ -31,6 +31,7 @@ function setBrowserEventListener(chromeBookmarkManager) {
                 }
             }
             bookmarkDatastore.commit();
+            console.log('commited');
         },
         onUpdate: function(parentList, bookmarkNode, siblingFolders, siblingBookmarks, isBookmark, isToolbarEntry) {
             console.log("on update called");
@@ -43,9 +44,11 @@ function setBrowserEventListener(chromeBookmarkManager) {
             } else {
                 parentRecordId = bookmarkDatastore.getParentRecordIdFromParentlist(parentList);
             }
+            console.log('parentID ==>', parentRecordId);
             if (parentRecordId) {
                 var childrenRecords;
                 var siblings;
+                console.log(isBookmark);
                 if (isBookmark) {
                     childrenRecords = bookmarkDatastore.getChildrenBookmarks(parentRecordId);
                     siblings = siblingBookmarks;
@@ -53,6 +56,7 @@ function setBrowserEventListener(chromeBookmarkManager) {
                     childrenRecords = bookmarkDatastore.getChildrenFolders(parentRecordId);
                     siblings = siblingFolders;
                 }
+                console.log('siblings ', siblings);
                 for (var i = 0; i < siblings.length; i++) {
                     var siblingFound = false;
                     for (var j = 0; j < childrenRecords.length; j++) {
@@ -78,6 +82,7 @@ function setBrowserEventListener(chromeBookmarkManager) {
                 }
                 // hoping only one record doesnt match .... need to retrospect further on the basis of timestamp maybe
                 if (childrenRecords.length == 1) {
+
                     if (isBookmark) {
                         bookmarkDatastore.updateBookmarkEntry(childrenRecords[0], bookmarkNode.title, bookmarkNode.url);
                     } else {
@@ -86,6 +91,7 @@ function setBrowserEventListener(chromeBookmarkManager) {
                 }
             }
             bookmarkDatastore.commit();
+            console.log('commited');
 
         },
         onRemove: function(parentNode, parentList, siblings, isToolbarEntry) {
@@ -183,18 +189,6 @@ function setup() {
     });
 }
 
-if (datastoreManager.isAuthenticated()) {
-    console.log('authenticated');
-    setup();
-    chrome.browserAction.setTitle({
-        title: 'Bookmark Box : In Sync'
-    });
-} else {
-    chrome.browserAction.setTitle({
-        title: 'Bookmark Box : Please Login'
-    });
-}
-
 
 function signIn(callback) {
     console.log('sign in');
@@ -248,3 +242,42 @@ function isAuthenticated() {
         return false;
     }
 }
+
+
+// Check whether new version is installed
+chrome.runtime.onInstalled.addListener(function(details) {
+    if (details.reason == "install") {
+        console.log("This is a first install!");
+        localStorage.clear();
+    } else if (details.reason == "update") {
+        var thisVersion = chrome.runtime.getManifest().version;
+        if (thisVersion === '2.0.0') {
+            console.log('clearing');
+            localStorage.clear();
+        }
+    }
+
+    if (datastoreManager.isAuthenticated()) {
+        console.log('authenticated');
+        setup();
+        chrome.browserAction.setTitle({
+            title: 'Bookmark Box : In Sync'
+        });
+    } else {
+        chrome.browserAction.setTitle({
+            title: 'Bookmark Box : Please Login'
+        });
+
+        chrome.notifications.create(null, {
+            type:'basic',
+            iconUrl:"img/Bookmark-Box-icon-38.png",
+            title:"Bookmark Box - Sign In Required",
+            message:"Please sign in with your dropbox account to sync your bookmarks"
+        }, function callback(notificationId){
+
+        });
+
+
+    }
+
+});
