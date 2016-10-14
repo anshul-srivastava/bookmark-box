@@ -64,6 +64,7 @@ function Panel(bookmarkApi) {
 	});
 
 	panel.port.on('saveCredentials', function(credentials) {
+		console.log('in here');
 		simpleStorage.storage.DropboxOAuth = credentials
 	});
 
