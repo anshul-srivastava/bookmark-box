@@ -568,7 +568,7 @@
 
                 function processEntries() {
                     console.log("processing entries");
-                    if (lastSyncTime) {
+                    if (lastSyncTime  && ds.getCurrentRevisionNo() !== 0) {
                         for (var i = 0; i < itemsToBeDeleted.length; i++) {
                             var timeStamp = itemsToBeDeleted[i].dateGroupModified;
                             if (!timeStamp) {
