@@ -51,6 +51,7 @@
 						bookmarkDatastore.createFolderEntry(data.parentList, data.bookmarkNode.title);
 					}
 				}
+				bookmarkDatastore.commit();
 			});
 
 			addon.port.on('bookmarkOnUpdate', function(data) {
@@ -105,6 +106,7 @@
 						}
 					}
 				}
+				bookmarkDatastore.commit();
 			});
 
 			addon.port.on('bookmarkOnRemove', function(data) {
@@ -156,6 +158,7 @@
 						}
 					}
 				}
+				bookmarkDatastore.commit();
 			});
 
 			addon.port.on('bookmarkOnMove', function(data) {
@@ -168,6 +171,7 @@
 				} else {
 					ret = bookmarkDatastore.moveFolder(data.movedNode.title, data.newParentList, data.isNewEntryToolbarEntry, data.oldParentList, data.isOldEntryToolbarEntry);
 				}
+				bookmarkDatastore.commit();
 
 			});
 

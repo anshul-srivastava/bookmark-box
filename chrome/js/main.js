@@ -1,5 +1,5 @@
 var datastoreManager = new DatastoreManager({
-    appKey: 'xlwyafffvnbpiez',
+    appKey: 'dcpyclznmtuxdhx',
     redirectUrl: 'https://anshul-srivastava.github.io/bookmark-box/bookmark-box-oauth-files/oauthreceiver.html'
 });
 
