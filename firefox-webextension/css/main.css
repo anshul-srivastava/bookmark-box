@@ -9,6 +9,8 @@ body {
         text-align: center;
       }
       .heading {
+        width:360px;
+      height:44px;
 
   background-image: -webkit-linear-gradient(top, rgb(249, 249, 249), rgb(233, 233, 233));
   background-image: -moz-linear-gradient(top, rgb(249, 249, 249), rgb(233, 233, 233));
@@ -57,7 +59,6 @@ body {
 
       #sign_in_container {
         text-align: center;
-        display: none;
       }
       
 
@@ -73,13 +74,13 @@ body {
         border-color: #e5d35b;
         margin-bottom: 12px;
         margin-top: 12px;
-        width: 8%;
+        width: 30%;
         display: inline-block;
         border-radius: 3px;
       }
       .loginDesc {
         margin-bottom: 12px;
-        font-size: 21px;
+        font-size: 16px;
       }
        #sign_in_btn {
         cursor: pointer;
@@ -88,10 +89,8 @@ body {
 
 
       #log_out_container {
-       
         text-align: center;
         height: 165px;
-        display: none;
       }
       
       .successContainer {
@@ -105,7 +104,7 @@ body {
           background-color: #e8f5df;
           background-image: url(../img/sync.png);
           border-color: #9ece9e;
-          width: 5%;
+          width: 20%;
           display: inline-block;
           border-radius: 3px;
       }
@@ -113,10 +112,8 @@ body {
         font-size: large;
       }
       .logoutDesc {
-
-        margin-top: 5px;
         margin-bottom: 12px;
-        font-size: 21px;
+        font-size: 16px;
       }
       #log_out_btn {
         cursor: pointer;

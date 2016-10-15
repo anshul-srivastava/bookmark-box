@@ -2,43 +2,16 @@
 <!doctype html>
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>Bookmark Box - Sync your bookmarks with your Dropbox account</title>
     <link href="css/font-awesome.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script type="text/javascript" src="js/apis/bundle.js"></script>
-    <script type="text/javascript" src="js/apis/ffext-dropboxauthdriver.js"></script>
-    <script type="text/javascript" src="js/apis/datastore-manager.js"></script>
-    <script type="text/javascript" src="js/apis/bookmarkdatastore.js"></script>
-    <script type="text/javascript" src="js/apis/sequencer.js"></script>
-    <script type="text/javascript" src="js/ui-main.js"></script>
-    <script type="text/javascript" src="js/popup.js"></script>
- 
+     <script src="js/popup.js"></script>
   </head>
   <body>
     <div class="headingContainer">
     <div class="heading"><img src="img/Bookmark-Box-icon-38.png"/><span>Bookmark Box</span></div>
     <div class="appDesc">Bookmark Box synchronizes your browser's bookmarks with your Dropbox account, across multiple computers and web browsers</div>
     </div>
-     
-
-    <div id="loading_container">
-      <div class="loadingText">
-         <span class="">Loading please wait ...</span>
-     </div>
-     
-    </div> 
-
-    <div id="dropbox_api_err_container">
-     <div class="errorLogoContainer">
-         <span class="errStatus">Error !!</span>
-     </div>
-     <div class="errorDesc"><span style="color:red">Dropbox API Load Error !!</span>
-        <p>Unable to load Dropbox api. Please make sure your browser is connected to internet</p>
-     </div>
-    </div>
-
-
     <div id="sign_in_container">
     <div class="syncWarningContainer">
          <span class="syncWarningStatus">Not Syncing.</span>
@@ -57,7 +30,7 @@
         <div id="log_out_btn" href="#"><img src="img/dropbox-unlink-button.png"></div>
         <div id="log_out_status_loading"><span>Logging out, Please wait ... <i class="fa fa-spinner fa-spin"></i><span></div>
     </div>
-<!--<script src="js/dropboxloader.js" type="text/javascript"></script>-->
+
   </body>
 </html>
 

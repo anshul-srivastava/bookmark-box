@@ -16,8 +16,6 @@
             var lastSyncTime = null;
             var syncedSinceBoot = false;
             var lastSyncSuccess = false;
-            var updateLastSyncTimeFunc = null;
-
 
             var that = this;
             var browserBookmarkApi;
@@ -25,14 +23,17 @@
             folderTable = datastore.getTable('folders');
             bookmarkTable = datastore.getTable('bookmarks');
 
-            var intermediateState = {};
-
 
             datastore.addRemoteChangeEventListener(function(event) {
-                console.log('remote event triigered', event);
+                console.log('remote event trigered', event);
                 that.syncBookmarks();
 
             });
+
+
+            var intermediateState = {};
+
+
 
 
             function insertEntry(table, data) {
@@ -45,9 +46,8 @@
                     data: data
                 };
                 return rec;
-
-
             }
+
 
             function searchInIntermidiaterecords(queryObj) {
                 // now finding records from intermediate state as it is possible commit is not called yet
@@ -98,6 +98,11 @@
                 return records;
 
             };
+
+
+
+
+
 
             /*
      This is function returns a javascript Object for a folder record that can be passed to the datastore api
@@ -306,6 +311,7 @@
                     }
                 }
                 var folderRecordJsonObj = createFolderRecordJsonObj(parentId);
+                console.log(folderRecordJsonObj);
                 var recordsFetched = folderTable.queryTable(folderRecordJsonObj);
                 if (recordsFetched && recordsFetched.length) {
                     return recordsFetched;
@@ -552,10 +558,10 @@
                 var itemsToBeCreated = [];
                 var itemsToBeDeleted = [];
                 var itemsToBeCreatedInDataStore = [];
-                //var lastSyncTime = localStorage.getItem('lastSyncTime');
-                /*if (lastSyncTime) {
-					lastSyncTime = parseInt(lastSyncTime);
-				}*/
+                var lastSyncTime = localStorage.getItem('lastSyncTime');
+                if (lastSyncTime) {
+                    lastSyncTime = parseInt(lastSyncTime);
+                }
 
 
                 function createItemInBrowser(callback) {
@@ -596,7 +602,8 @@
                 }
 
                 function createItemInDataStore(callback) {
-                    console.log('creating item in datastore');
+                    // console.log(itemsToBeCreatedInDataStore);
+                    //console.log('creating item in datastore');
                     if (itemsToBeCreatedInDataStore.length) {
                         if (itemsToBeCreatedInDataStore[0].url) { //is bookmark ??
                             browserBookmarkApi.getNodeParentList(itemsToBeCreatedInDataStore[0], function(err, node, parentList, isToolbarEntry) {
@@ -635,9 +642,9 @@
                     console.log("processing entries");
                     if (lastSyncTime && ds.getCurrentRevisionNo() !== 0) {
                         for (var i = 0; i < itemsToBeDeleted.length; i++) {
-                            var timeStamp = itemsToBeDeleted[i].dateUpdated;
+                            var timeStamp = itemsToBeDeleted[i].dateGroupModified;
                             if (!timeStamp) {
-                                timeStamp = itemsToBeDeleted[i].dateCreated;
+                                timeStamp = itemsToBeDeleted[i].dateAdded;
                             }
                             console.log("timestamp ==> ", timeStamp, " - ", lastSyncTime);
                             if (timeStamp < lastSyncTime) {
@@ -667,6 +674,7 @@
                         }
                         var dsChildren = that.getChildren(dsFolderId);
                         if (bmChildrenList) {
+
                             while (dsChildren.length) {
                                 var i = 0;
                                 var found = false;
@@ -732,14 +740,7 @@
 
             this.setBookmarkApi = function(api) {
                 browserBookmarkApi = api;
-            };
-            this.setLastSyncTime = function(time) {
-                lastSyncTime = time;
-            };
-            this.setLastSyncTimeUpdateFunc = function(func) {
-                updateLastSyncTimeFunc = func;
             }
-
             this.syncBookmarks = function() {
                 if (!browserBookmarkApi) {
                     return;
@@ -749,7 +750,7 @@
                 sync(browserBookmarkApi, null, function() {
                     sync(browserBookmarkApi, 'toolbar', function() {
                         lastSyncTime = new Date().getTime();
-                        updateLastSyncTimeFunc(lastSyncTime);
+                        localStorage.setItem('lastSyncTime', lastSyncTime);
                         syncedSinceBoot = true;
                         lastSyncSuccess = true;
                         that.commit();
@@ -768,8 +769,7 @@
 
             this.close = function() {
                 //datastore.close();
-                //localStorage.removeItem('lastSyncTime');
-                lastSyncTime = null;
+                localStorage.removeItem('lastSyncTime');
                 folderTable = null;
                 bookmarkTable = null;
                 syncedSinceBoot = false;
@@ -791,13 +791,27 @@
                 return true;
             };
 
+
+
+            // timer for commit
+            // added 2 sec delay in case of more commit
+            var commitTimeout;
+
+            function commitDS() {
+                commitTimeout = setTimeout(function() {
+                    commitTimeout = null;
+                    ds.commit();
+                }, 2000);
+
+            }
             this.commit = function() {
                 // if (commitTimeout) {
                 //     clearTimeout(commitTimeout);
                 //     return commitDS();
                 // }
                 // commitDS();
-                datastore.commit();
+                ds.commit();
             };
+
         }
     })(window);
