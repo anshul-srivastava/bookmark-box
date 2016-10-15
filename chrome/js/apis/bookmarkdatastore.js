@@ -610,7 +610,6 @@
                                 if (err) {
                                     return;
                                 } else {
-                                    console.log('node ==>', JSON.stringify(parentList), node.title);
                                     if (isToolbarEntry) {
                                         that.createBookmarkEntryInToolbar(parentList, node.title, node.url);
                                     } else {

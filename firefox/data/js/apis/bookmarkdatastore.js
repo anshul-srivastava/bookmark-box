@@ -25,6 +25,7 @@
             folderTable = datastore.getTable('folders');
             bookmarkTable = datastore.getTable('bookmarks');
 
+            var intermediateState = {};
 
 
             datastore.addRemoteChangeEventListener(function(event) {
@@ -32,6 +33,71 @@
                 that.syncBookmarks();
 
             });
+
+
+            function insertEntry(table, data) {
+                data.dateCreated = new Date().getTime();
+                var rec = table.insert(data);
+
+                // saving in intermediate state
+                intermediateState[rec.getId()] = {
+                    record: rec,
+                    data: data
+                };
+                return rec;
+
+
+            }
+
+            function searchInIntermidiaterecords(queryObj) {
+                // now finding records from intermediate state as it is possible commit is not called yet
+                var intermediateRecs = [];
+                var searchKeys = Object.keys(queryObj);
+                var ids = Object.keys(intermediateState);
+                for (var i = 0; i < ids.length; i++) {
+                    var found = true;
+                    var item = intermediateState[ids[i]];
+                    for (var j = 0; j < searchKeys.length; j++) {
+                        if (item.data[searchKeys[j]] !== queryObj[searchKeys[j]]) {
+                            found = false;
+                        }
+                    }
+                    if (found) {
+                        intermediateRecs.push(item.record);
+                    }
+
+                }
+                return intermediateRecs;
+            }
+
+
+            folderTable.queryTable = function(queryObj) {
+                var records = folderTable.query(queryObj);
+
+                // deleting records from intermediate state
+                for (var i = 0; i < records.length; i++) {
+                    delete intermediateState[records[i].getId()];
+                }
+
+                var recs = searchInIntermidiaterecords(queryObj);
+                records = records.concat(recs);
+                return records;
+
+            };
+
+            bookmarkTable.queryTable = function(queryObj) {
+                var records = bookmarkTable.query(queryObj);
+
+                // deleting records from intermediate state
+                for (var i = 0; i < records.length; i++) {
+                    delete intermediateState[records[i].getId()];
+                }
+
+                var recs = searchInIntermidiaterecords(queryObj);
+                records = records.concat(recs);
+                return records;
+
+            };
 
             /*
      This is function returns a javascript Object for a folder record that can be passed to the datastore api
@@ -65,11 +131,7 @@
                 return obj;
             }
 
-            function insertEntry(table, data) {
-                data.dateCreated = new Date().getTime();
-                return table.insert(data);
 
-            }
 
             function updateFolderContentChangeTime(recordId) {
                 if (!recordId) {
@@ -98,7 +160,7 @@
                 var parentRecord;
                 var parentId = rootFolderId;
                 while (parentList.length) {
-                    var recordsFetched = folderTable.query(createFolderRecordJsonObj(parentId, parentList[0]));
+                    var recordsFetched = folderTable.queryTable(createFolderRecordJsonObj(parentId, parentList[0]));
                     if (recordsFetched.length) { //grand parent record found
                         parentRecord = recordsFetched[0];
                         parentId = parentRecord.getId();
@@ -168,7 +230,7 @@
                 if (parentId) {
                     //checking for duplicate entry;
                     var folderRecordJsonObj = createFolderRecordJsonObj(parentId, title);
-                    var recordsFetched = folderTable.query(folderRecordJsonObj);
+                    var recordsFetched = folderTable.queryTable(folderRecordJsonObj);
                     if (!(recordsFetched && recordsFetched.length)) { // record exists ???
                         var folderRecord = insertEntry(folderTable, folderRecordJsonObj);
                         if (folderRecord) {
@@ -211,7 +273,7 @@
                 if (parentId) {
                     //checking for duplicate entry
                     var bookmarkJsonObj = createBookmarkRecordJsonObj(parentId, url, title);
-                    var recordsFetched = bookmarkTable.query(bookmarkJsonObj);
+                    var recordsFetched = bookmarkTable.queryTable(bookmarkJsonObj);
                     if (!(recordsFetched && recordsFetched.length)) { // record exists
                         var bookmarkRecord = insertEntry(bookmarkTable, bookmarkJsonObj);
                         if (bookmarkRecord) {
@@ -244,8 +306,8 @@
                     }
                 }
                 var folderRecordJsonObj = createFolderRecordJsonObj(parentId);
-                var recordsFetched = folderTable.query(folderRecordJsonObj);
-                if (recordsFetched) {
+                var recordsFetched = folderTable.queryTable(folderRecordJsonObj);
+                if (recordsFetched && recordsFetched.length) {
                     return recordsFetched;
                 } else {
                     return null;
@@ -261,8 +323,8 @@
                     }
                 }
                 var bookmarkJsonObj = createBookmarkRecordJsonObj(parentId);
-                var recordsFetched = bookmarkTable.query(bookmarkJsonObj);
-                if (recordsFetched) {
+                var recordsFetched = bookmarkTable.queryTable(bookmarkJsonObj);
+                if (recordsFetched && recordsFetched.length) {
                     return recordsFetched;
                 } else {
                     return null;
@@ -415,7 +477,7 @@
 
                 var folderRecordJsonObj = createFolderRecordJsonObj(oldParentId, title);
 
-                var recordsFetched = folderTable.query(folderRecordJsonObj);
+                var recordsFetched = folderTable.queryTable(folderRecordJsonObj);
                 if (recordsFetched && recordsFetched.length) {
                     recordsFetched[0].set('parentId', newParentId);
                     recordsFetched[0].set('dateUpdated', new Date().getTime());
@@ -459,7 +521,7 @@
                 }
 
                 var bookmarkJsonObj = createBookmarkRecordJsonObj(oldParentId, url, bookmarkTitle);
-                var recordsFetched = bookmarkTable.query(bookmarkJsonObj);
+                var recordsFetched = bookmarkTable.queryTable(bookmarkJsonObj);
                 if (recordsFetched && recordsFetched.length) {
                     recordsFetched[0].set('parentId', newParentId);
                     recordsFetched[0].set('dateUpdated', new Date().getTime());
@@ -473,7 +535,7 @@
 
             this.loopAllBookmarks = function(callback) {
                 var bookmarkJsonObj = createBookmarkRecordJsonObj();
-                var recordsFetched = bookmarkTable.query(bookmarkJsonObj);
+                var recordsFetched = bookmarkTable.queryTable(bookmarkJsonObj);
                 if (recordsFetched && recordsFetched.length) {
                     recordsFetched.forEach(function(bookmarkRecord) {
                         var ret = findParentList(bookmarkRecord);
@@ -714,13 +776,13 @@
             };
 
             this.deleteAll = function() {
-                var recordsFetched = folderTable.query({});
+                var recordsFetched = folderTable.queryTable({});
                 if (recordsFetched && recordsFetched.length) {
                     recordsFetched.forEach(function(record) {
                         record.deleteRecord();
                     });
                 }
-                recordsFetched = bookmarkTable.query({});
+                recordsFetched = bookmarkTable.queryTable({});
                 if (recordsFetched && recordsFetched.length) {
                     recordsFetched.forEach(function(record) {
                         record.deleteRecord();
