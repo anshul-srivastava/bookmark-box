@@ -1,5 +1,5 @@
 var datastoreManager = new DatastoreManager({
-    appKey: 'dcpyclznmtuxdhx',
+    appKey: 'xlwyafffvnbpiez',
     redirectUrl: 'https://anshul-srivastava.github.io/bookmark-box/bookmark-box-oauth-files/oauthreceiver.html'
 });
 
@@ -251,7 +251,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         localStorage.clear();
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
-        if (thisVersion === '2.0.0') {
+        if (thisVersion === '2.0.1') {
             console.log('clearing');
             localStorage.clear();
         }
