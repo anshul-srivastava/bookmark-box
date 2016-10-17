@@ -5,11 +5,6 @@ var notifications = require("sdk/notifications");
 var simpleStorage = require("sdk/simple-storage");
 
 
-var bookmarkApi = require('./bookmarks.js');
-var firefoxBookmark = bookmarkApi.getInstance();
-
-var bookmarkPanel = require("./ui/bookmarkPopupPanel").getPanel(firefoxBookmark);
-var bookmarkToggleButton = require("./ui/bookmarkPanelActionButton").getActionButton(bookmarkPanel, 376, 352);
 
 
 
@@ -30,7 +25,20 @@ exports.main = function(options, callbacks) {
         //     text: "Signed if",
         //     iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
         // });
+
+        var bookmarkApi = require('./bookmarks.js');
+        var firefoxBookmark = bookmarkApi.getInstance();
+
+        var bookmarkPanel = require("./ui/bookmarkPopupPanel").getPanel(firefoxBookmark);
+        var bookmarkToggleButton = require("./ui/bookmarkPanelActionButton").getActionButton(bookmarkPanel, 376, 352);
+
     }
+
+    notifications.notify({
+        title: "Bookmark Box - Sign In Required",
+        text: JSON.stringify(options),
+        iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
+    });
 };
 
 

@@ -247,15 +247,29 @@ function isAuthenticated() {
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details) {
     console.log('application installed or updated')
+    var cleared = false;
     if (details.reason == "install") {
         console.log("This is a first install!");
         localStorage.clear();
+        cleared = true;
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
-        if (thisVersion === '2.0.2') {
+        if (thisVersion === '2.0.3') {
             console.log('clearing');
             localStorage.clear();
+            cleared = true;
         }
+    }
+
+    if (cleared) {
+        chrome.notifications.create(null, {
+            type: 'basic',
+            iconUrl: "img/Bookmark-Box-icon-38.png",
+            title: "Bookmark Box - Sign In Required",
+            message: "Please sign in with your dropbox account to sync your bookmarks"
+        }, function callback(notificationId) {
+
+        });
     }
 
 });
@@ -275,16 +289,5 @@ setTimeout(function() {
         chrome.browserAction.setTitle({
             title: 'Bookmark Box : Please Login'
         });
-
-        chrome.notifications.create(null, {
-            type: 'basic',
-            iconUrl: "img/Bookmark-Box-icon-38.png",
-            title: "Bookmark Box - Sign In Required",
-            message: "Please sign in with your dropbox account to sync your bookmarks"
-        }, function callback(notificationId) {
-
-        });
     }
-
-
-},500);
+}, 500);
