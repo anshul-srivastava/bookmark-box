@@ -252,7 +252,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         localStorage.clear();
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
-        if (thisVersion === '2.0.1') {
+        if (thisVersion === '2.0.2') {
             console.log('clearing');
             localStorage.clear();
         }

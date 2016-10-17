@@ -4,7 +4,7 @@
   "name": "Bookmark Box",
   "author": "Anshul Srivastava",
   "description": "This extension stores browser bookmarks into the user's dropbox account and syncs them across multiple computers and web browser",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "icons": { "16": "img/Bookmark-Box-icon-16.png",
            "48": "img/Bookmark-Box-icon-48.png",
           "128": "img/Bookmark-Box-icon-128.png" 
