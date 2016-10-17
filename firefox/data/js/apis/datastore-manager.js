@@ -132,16 +132,7 @@ var DatastoreManager = function(dropBoxAppKey, credentials, authDriver, setCrede
         }
         dropBoxDatastoreManager = null;
 
-        dropboxClient.signOut({}, function(err) {
-            if (err) {
-                console.log("error occured in signing out", err);
-            }
-            console.log('in dataStoreManager ==> ', 8);
-            callback();
-        });
-
-
-
+        callback();
         //initializeDropboxClient();
     }
 

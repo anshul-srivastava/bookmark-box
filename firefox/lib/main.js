@@ -20,7 +20,7 @@ exports.main = function(options, callbacks) {
             iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
         });
     } else {
-       
+
         var bookmarkApi = require('./bookmarks.js');
         var firefoxBookmark = bookmarkApi.getInstance();
 
@@ -28,6 +28,7 @@ exports.main = function(options, callbacks) {
         var bookmarkToggleButton = require("./ui/bookmarkPanelActionButton").getActionButton(bookmarkPanel, 376, 352);
 
     }
+
 };
 
 

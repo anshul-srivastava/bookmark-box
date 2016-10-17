@@ -10,7 +10,7 @@
 			return;
 		}
 
-		var firefoxauthDriver = new FFExtDropboxAuthdriver('dcpyclznmtuxdhx',addon.options.redirectUrl, function(options, callback) {
+		var firefoxauthDriver = new FFExtDropboxAuthdriver('xlwyafffvnbpiez',addon.options.redirectUrl, function(options, callback) {
 			var timestamp = new Date().getTime();
 			callbackList[timestamp] = callback;
 			addon.port.emit('dropboxAuthenticate', {
@@ -19,7 +19,7 @@
 				stateParam: options.state
 			});
 		});
-		var datastoreManager = new DatastoreManager('dcpyclznmtuxdhx', addon.options.DropboxOAuth, firefoxauthDriver, function(dropboxCredentials) {
+		var datastoreManager = new DatastoreManager('xlwyafffvnbpiez', addon.options.DropboxOAuth, firefoxauthDriver, function(dropboxCredentials) {
 			addon.port.emit('saveCredentials', dropboxCredentials);
 		});
 
