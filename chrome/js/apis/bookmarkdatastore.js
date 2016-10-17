@@ -311,7 +311,7 @@
                     }
                 }
                 var folderRecordJsonObj = createFolderRecordJsonObj(parentId);
-                console.log(folderRecordJsonObj);
+              
                 var recordsFetched = folderTable.queryTable(folderRecordJsonObj);
                 if (recordsFetched && recordsFetched.length) {
                     return recordsFetched;

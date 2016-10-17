@@ -246,6 +246,7 @@ function isAuthenticated() {
 
 // Check whether new version is installed
 chrome.runtime.onInstalled.addListener(function(details) {
+    console.log('application installed or updated')
     if (details.reason == "install") {
         console.log("This is a first install!");
         localStorage.clear();
@@ -256,6 +257,13 @@ chrome.runtime.onInstalled.addListener(function(details) {
             localStorage.clear();
         }
     }
+
+});
+
+// HACK --> adding 1 sec delay to make sure oninstalled event has fired 
+
+setTimeout(function() {
+    console.log('starting application');
 
     if (datastoreManager.isAuthenticated()) {
         console.log('authenticated');
@@ -269,15 +277,14 @@ chrome.runtime.onInstalled.addListener(function(details) {
         });
 
         chrome.notifications.create(null, {
-            type:'basic',
-            iconUrl:"img/Bookmark-Box-icon-38.png",
-            title:"Bookmark Box - Sign In Required",
-            message:"Please sign in with your dropbox account to sync your bookmarks"
-        }, function callback(notificationId){
+            type: 'basic',
+            iconUrl: "img/Bookmark-Box-icon-38.png",
+            title: "Bookmark Box - Sign In Required",
+            message: "Please sign in with your dropbox account to sync your bookmarks"
+        }, function callback(notificationId) {
 
         });
-
-
     }
 
-});
+
+},500);
