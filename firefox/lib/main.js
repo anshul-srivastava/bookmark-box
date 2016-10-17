@@ -20,12 +20,7 @@ exports.main = function(options, callbacks) {
             iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
         });
     } else {
-        // notifications.notify({
-        //     title: "Bookmark Box - Sign In not Required",
-        //     text: "Signed if",
-        //     iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
-        // });
-
+       
         var bookmarkApi = require('./bookmarks.js');
         var firefoxBookmark = bookmarkApi.getInstance();
 
@@ -33,12 +28,6 @@ exports.main = function(options, callbacks) {
         var bookmarkToggleButton = require("./ui/bookmarkPanelActionButton").getActionButton(bookmarkPanel, 376, 352);
 
     }
-
-    notifications.notify({
-        title: "Bookmark Box - Sign In Required",
-        text: JSON.stringify(options),
-        iconURL: self.data.url("img/Bookmark-Box-icon-38.png")
-    });
 };
 
 
