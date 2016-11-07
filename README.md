@@ -4,3 +4,5 @@ This is web-browser addon that  stores browser bookmarks into the user's dropbox
 Available at : 
 
 **Chrome** :- [Bookmark Box](https://chrome.google.com/webstore/detail/bookmark-box/eghjldnoldfcnfgfkbnmcbaalnkljphi)
+
+**Firefox** :- [Bookmark Box](https://addons.mozilla.org/en-US/firefox/addon/bookmark-box/?src=ss)
