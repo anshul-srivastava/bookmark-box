@@ -1,6 +1,8 @@
 var datastoreManager = new DatastoreManager({
     appKey: 'xlwyafffvnbpiez',
-    redirectUrl: 'https://anshul-srivastava.github.io/bookmark-box/bookmark-box-oauth-files/oauthreceiver.html'
+    //redirectUrl: 'https://anshul-srivastava.github.io/bookmark-box/bookmark-box-oauth-files/oauthreceiver.html'
+    // redirectUrl: 'http://localhost:8080/bookmark-box-oauth-files/oauthreceiver.html' 
+    redirectUrl: 'https://programmingblah.com/bookmark-box/bookmark-box-oauth-files/oauthreceiver.html'
 });
 
 
@@ -254,7 +256,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
         cleared = true;
     } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
-        if (thisVersion === '2.0.3') {
+        if (thisVersion === '2.0.4') {
             console.log('clearing');
             localStorage.clear();
             cleared = true;
